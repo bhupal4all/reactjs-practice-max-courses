@@ -1,11 +1,1 @@
-{
-  "events": [
-    {
-      "id": "e1",
-      "title": "A dummy event",
-      "date": "2023-02-22",
-      "image": "https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg",
-      "description": "Join this amazing event and connect with fellow developers."
-    }
-  ]
-}
+{"events":[{"title":"test3","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","id":"24b1e915-c244-40d8-aa67-7a3b2f2c5a1f"},{"title":"test3","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","id":"9d6d6c3c-1e12-4f24-9866-d3984abdcea5"},{"title":"test3","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"0101","id":"c2a7ace3-87ae-4f3f-8c0a-195ad5d3dd31"},{"title":"test3","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"0101","id":"20eed36e-c1dc-4b06-a468-f4786f9c00d4"},{"title":"test","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"test","id":"94774ef0-0f79-4c1d-867a-b542161bc7fa"},{"title":"test","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"test","id":"a38116f5-b961-4102-9696-ad81abc4402b"},{"title":"Test Event","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","date":"0001-01-01","description":"Test Events","id":"fc4e113e-b839-4241-ab4f-c5d1fd3d2c93"}]}

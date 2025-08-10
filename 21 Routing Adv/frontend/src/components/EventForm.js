@@ -1,13 +1,31 @@
-import { Form, useNavigate } from 'react-router-dom'
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom'
 
 import classes from './EventForm.module.css'
 
 function EventForm({ method, event }) {
+  const actionData = useActionData()
+  const actionDataJson = JSON.parse(actionData ?? '{}')
+
   const navigate = useNavigate()
+  const navigation = useNavigation()
+
+  const isSubmitting = navigation.state === 'submitting'
 
   return (
     <>
-      <Form method='POST' className={classes.form}>
+      <Form method={method} className={classes.form}>
+        {actionDataJson && actionDataJson.errors && (
+          <ul>
+            {Object.values(actionDataJson.errors).map((err) => (
+              <li key={err}>{err}</li>
+            ))}
+          </ul>
+        )}
         <p>
           <label htmlFor="title">Title</label>
           <input
@@ -52,7 +70,7 @@ function EventForm({ method, event }) {
           <button type="button" onClick={() => navigate('..')}>
             Cancel
           </button>
-          <button>Save</button>
+          <button disabled={isSubmitting}>Save</button>
         </div>
       </Form>
     </>

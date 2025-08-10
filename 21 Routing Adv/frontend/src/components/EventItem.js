@@ -1,11 +1,16 @@
-import {  Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSubmit } from 'react-router-dom'
 import classes from './EventItem.module.css'
 
 function EventItem({ event }) {
-  const navigate = useNavigate()
+  const submit = useSubmit()
 
   function startDeleteHandler() {
-    navigate('/events')
+    const isYes = window.confirm('Are you sure ?')
+    if (isYes) {
+      submit(null, {
+        method: 'DELETE',
+      })
+    }
   }
 
   return (

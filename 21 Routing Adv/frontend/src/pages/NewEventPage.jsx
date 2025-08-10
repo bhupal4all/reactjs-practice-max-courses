@@ -4,12 +4,12 @@ import EventForm from '../components/EventForm'
 export default function NewEventPage() {
   return (
     <>
-      <EventForm />
+      <EventForm method={'POST'} />
     </>
   )
 }
 
-export async function saveNewEventAction({ request, params }) {
+export async function saveEventAction({ request, params }) {
   const data = await request.formData()
   const eventData = {
     title: data.get('title'),
@@ -18,8 +18,14 @@ export async function saveNewEventAction({ request, params }) {
     description: data.get('description'),
   }
 
-  const response = await fetch('http://localhost:8080/events', {
-    method: 'POST',
+  const method = request.method;
+  let url = 'http://localhost:8080/events';
+  if (method === 'PATCH') {
+    url = url + `/${params.id}`;
+  }
+
+  const response = await fetch(url, {
+    method: method,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -36,6 +42,18 @@ export async function saveNewEventAction({ request, params }) {
       }
     )
   }
+
+  // if (true) {
+  //   return new Response(JSON.stringify({
+  //     message: 'Failed to save',
+  //     errors: {
+  //       title: 'Invalid Input',
+  //       image: 'Invalid Image URL'
+  //     }
+  //   }), {
+  //     status: 422
+  //   });
+  // }
 
   const resData = await response.json();
   console.log(resData);

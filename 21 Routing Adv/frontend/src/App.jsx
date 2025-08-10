@@ -10,7 +10,7 @@ import EventDetailPage, { deleteEventByidAction, loadEventById } from './pages/E
 import NewEventPage, { saveEventAction } from './pages/NewEventPage'
 import EditEventPage from './pages/EditEventPage'
 import Layout from './Layout'
-import AllEventsPage, { allEventsLoader } from './pages/AllEventsPage'
+import AllEventsPage, { allEventsLoader, deferLoader } from './pages/AllEventsPage'
 import ErrorPage from './pages/ErrorPage'
 import NewsletterPage, { newsletterAction } from './components/Newsletter'
 
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AllEventsPage />,
-            loader: allEventsLoader,
+            loader: deferLoader,
           },
           {
             path: ':id',

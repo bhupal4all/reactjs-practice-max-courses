@@ -6,8 +6,11 @@ import { deleteEventById, fetchEventById } from '../../api/http.js'
 import LoadingIndicator from '../UI/LoadingIndicator.jsx'
 import ErrorBlock from '../UI/ErrorBlock.jsx'
 import { queryClient } from '../../App.jsx'
+import Modal from '../UI/Modal.jsx'
+import { useState } from 'react'
 
 export default function EventDetails() {
+  const [deleteModal, setDeleteModal] = useState(false)
   const navigate = useNavigate()
   const params = useParams()
 
@@ -25,7 +28,7 @@ export default function EventDetails() {
 
   if (isFetching) {
     content = (
-      <div style={{textAlign: "center"}}>
+      <div style={{ textAlign: 'center' }}>
         <p>Fetching Event Details...</p>
       </div>
     )
@@ -51,34 +54,53 @@ export default function EventDetails() {
       console.log('Delete completed')
       navigate('/events')
       queryClient.invalidateQueries({
-        queryKey: ['events']
+        queryKey: ['events'],
+        refetchType: 'none', // queries will not triggered immedidately
       })
     },
   })
+
+  function handleStartDelete() {
+    setDeleteModal(true)
+  }
+
+  function handleStopDelete() {
+    setDeleteModal(false)
+  }
 
   function handleDelete() {
     deleteMutate({ id: params.id })
   }
 
-  if (isDeleting) {
-    content = (
-      <div style={{textAlign: "center"}}>
-        <p>Deleting Event...</p>
-      </div>
-    )
-  }
-
-  if (isDeleteError && deleteError) {
-    content = (
-      <ErrorBlock
-        title="Failed to Delete Event"
-        message={deleteError.info?.message || 'Failed to delete event detail'}
-      />
-    )
-  }
-
   return (
     <>
+      {deleteModal && (
+        <Modal onClose={handleStopDelete}>
+          <h2>Are you to delete?</h2>
+          <p>
+            Do you really want to delete the event? This action cant be undone.
+          </p>
+          {isDeleting && <p>Deleting Event...</p>}
+          {!isDeleting && (
+            <div className="form-actions">
+              <button onClick={handleStopDelete} className="button-text">
+                Close
+              </button>
+              <button onClick={handleDelete} className="button">
+                Delete
+              </button>
+            </div>
+          )}
+          {isDeleteError && deleteError && (
+            <ErrorBlock
+              title="Failed to Delete Event"
+              message={
+                deleteError.info?.message || 'Failed to delete event detail'
+              }
+            />
+          )}
+        </Modal>
+      )}
       <Outlet />
       <Header>
         <Link to="/events" className="nav-item">
@@ -91,7 +113,7 @@ export default function EventDetails() {
           <header>
             <h1>{eventData.title}</h1>
             <nav>
-              <button onClick={handleDelete}>Delete</button>
+              <button onClick={handleStartDelete}>Delete</button>
               <Link to="edit">Edit</Link>
             </nav>
           </header>

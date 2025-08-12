@@ -1,21 +1,35 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import ImagePicker from '../ImagePicker.jsx';
+import ImagePicker from '../ImagePicker.jsx'
+import { useQuery } from '@tanstack/react-query'
+import { fetchImages } from '../../api/http.js'
+import ErrorBlock from '../UI/ErrorBlock.jsx'
 
 export default function EventForm({ inputData, onSubmit, children }) {
-  const [selectedImage, setSelectedImage] = useState(inputData?.image);
+  const [selectedImage, setSelectedImage] = useState(inputData?.image)
+
+  const {
+    data: imageData,
+    isPending: isImagesLoading,
+    isError: isImageError,
+    error: imageError,
+  } = useQuery({
+    queryKey: ['event-images'],
+    queryFn: fetchImages,
+    initialData: [],
+  })
 
   function handleSelectImage(image) {
-    setSelectedImage(image);
+    setSelectedImage(image)
   }
 
   function handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData);
+    const formData = new FormData(event.target)
+    const data = Object.fromEntries(formData)
 
-    onSubmit({ ...data, image: selectedImage });
+    onSubmit({ ...data, image: selectedImage })
   }
 
   return (
@@ -30,13 +44,25 @@ export default function EventForm({ inputData, onSubmit, children }) {
         />
       </p>
 
-      <div className="control">
-        <ImagePicker
-          images={[]}
-          onSelect={handleSelectImage}
-          selectedImage={selectedImage}
+      {isImagesLoading && <p>Loading Images</p>}
+      {isImageError && (
+        <ErrorBlock
+          title="Failed to Load Images"
+          message={
+            imageError.info?.message ||
+            'Failed to load images, please check later'
+          }
         />
-      </div>
+      )}
+      {imageData && (
+        <div className="control">
+          <ImagePicker
+            images={imageData}
+            onSelect={handleSelectImage}
+            selectedImage={selectedImage}
+          />
+        </div>
+      )}
 
       <p className="control">
         <label htmlFor="description">Description</label>
@@ -81,5 +107,5 @@ export default function EventForm({ inputData, onSubmit, children }) {
 
       <p className="form-actions">{children}</p>
     </form>
-  );
+  )
 }

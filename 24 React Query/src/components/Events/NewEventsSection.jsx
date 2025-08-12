@@ -1,53 +1,25 @@
-import { useEffect, useState } from 'react';
-
-import LoadingIndicator from '../UI/LoadingIndicator.jsx';
-import ErrorBlock from '../UI/ErrorBlock.jsx';
-import EventItem from './EventItem.jsx';
+import LoadingIndicator from '../UI/LoadingIndicator.jsx'
+import ErrorBlock from '../UI/ErrorBlock.jsx'
+import EventItem from './EventItem.jsx'
+import { useQuery } from '@tanstack/react-query'
+import { fetchEvents } from '../../api/http.js'
 
 export default function NewEventsSection() {
-  const [data, setData] = useState();
-  const [error, setError] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, isFetching, error } = useQuery({
+    queryKey: ['events'],
+    queryFn: ({ signal }) => fetchEvents({ signal }),
+  })
 
-  useEffect(() => {
-    async function fetchEvents() {
-      setIsLoading(true);
-      const response = await fetch('http://localhost:3000/events');
+  let content
 
-      if (!response.ok) {
-        const error = new Error('An error occurred while fetching the events');
-        error.code = response.status;
-        error.info = await response.json();
-        throw error;
-      }
-
-      const { events } = await response.json();
-
-      return events;
-    }
-
-    fetchEvents()
-      .then((events) => {
-        setData(events);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  let content;
-
-  if (isLoading) {
-    content = <LoadingIndicator />;
+  if (isFetching) {
+    content = <LoadingIndicator />
   }
 
   if (error) {
     content = (
       <ErrorBlock title="An error occurred" message="Failed to fetch events" />
-    );
+    )
   }
 
   if (data) {
@@ -59,7 +31,7 @@ export default function NewEventsSection() {
           </li>
         ))}
       </ul>
-    );
+    )
   }
 
   return (
@@ -69,5 +41,10 @@ export default function NewEventsSection() {
       </header>
       {content}
     </section>
-  );
+  )
+}
+
+export async function eventsLoader(queryClient) {
+  console.log('Events Loader from route')
+  return []
 }

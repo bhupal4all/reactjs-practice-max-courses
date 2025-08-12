@@ -43,8 +43,3 @@ export default function NewEventsSection() {
     </section>
   )
 }
-
-export async function eventsLoader(queryClient) {
-  console.log('Events Loader from route')
-  return []
-}

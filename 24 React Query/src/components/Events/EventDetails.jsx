@@ -3,7 +3,6 @@ import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import Header from '../Header.jsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { deleteEventById, fetchEventById } from '../../api/http.js'
-import LoadingIndicator from '../UI/LoadingIndicator.jsx'
 import ErrorBlock from '../UI/ErrorBlock.jsx'
 import { queryClient } from '../../App.jsx'
 import Modal from '../UI/Modal.jsx'
@@ -136,4 +135,12 @@ export default function EventDetails() {
       )}
     </>
   )
+}
+
+export async function eventsLoader({ params }) {
+  console.log('Router Loader: Fetching event data')
+  return queryClient.fetchQuery({
+    queryKey: ['events', params.id],
+    queryFn: ({ signal }) => fetchEventById({ signal, id: params.id }),
+  })
 }

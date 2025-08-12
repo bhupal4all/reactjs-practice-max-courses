@@ -1,7 +1,7 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import Events from './components/Events/Events.jsx'
-import EventDetails from './components/Events/EventDetails.jsx'
+import EventDetails, { eventsLoader } from './components/Events/EventDetails.jsx'
 import NewEvent from './components/Events/NewEvent.jsx'
 import EditEvent from './components/Events/EditEvent.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -26,6 +26,7 @@ const router = createBrowserRouter([
   {
     path: '/events/:id',
     element: <EventDetails />,
+    loader: eventsLoader,
     children: [
       {
         path: '/events/:id/edit',

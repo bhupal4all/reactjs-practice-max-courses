@@ -16,7 +16,7 @@ export default function EventForm({ inputData, onSubmit, children }) {
   } = useQuery({
     queryKey: ['event-images'],
     queryFn: fetchImages,
-    initialData: [],
+    initialData: []
   })
 
   function handleSelectImage(image) {

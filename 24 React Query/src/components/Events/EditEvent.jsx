@@ -18,7 +18,7 @@ export default function EditEvent() {
     isError,
     error,
   } = useQuery({
-    queryKey: ['events', { id: params.id }],
+    queryKey: ['events', params.id],
     queryFn: ({ signal }) => fetchEventById({ signal, id: params.id }),
   })
 
@@ -29,13 +29,29 @@ export default function EditEvent() {
     error: updateError,
   } = useMutation({
     mutationFn: saveNewPost,
+    onMutate: async (mutateData) => {
+      console.log('Mutating Data', mutateData)
+      const newEventData = mutateData.event
+
+      await queryClient.cancelQueries({
+        queryKey: ['events', params.id],
+      })
+      const prevData = queryClient.getQueryData(['events', params.id])
+      queryClient.setQueryData(['events', params.id], newEventData);
+      return {
+        previousData: prevData,
+      }
+    },
     onSuccess: () => {
       console.log('Mutation Success')
-      queryClient.invalidateQueries(['events'])
+      queryClient.invalidateQueries({
+        queryKey: ['events', params.id],
+      })
       navigate(`/events/${params.id}`)
     },
-    onError: (error) => {
+    onError: (error, data, context) => {
       console.log('Mutation Error', error)
+      queryClient.setQueriesData(['events', params.id], context.previousData)
     },
     onSettled: () => {
       console.log('Mutation Compelted')
@@ -43,8 +59,8 @@ export default function EditEvent() {
   })
 
   function handleSubmit(formData) {
-    console.log('sving ', formData)
     mutate({ event: formData, id: params.id })
+    navigate('..')
   }
 
   let content
